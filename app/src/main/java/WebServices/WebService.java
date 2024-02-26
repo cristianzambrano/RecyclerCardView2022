@@ -2,12 +2,15 @@ package WebServices;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONException;
 
 import java.util.Map;
+
+import uteq.solutions.recyclercardview.R;
 
 
 public class WebService extends AsyncTask<String, Long, String> {
@@ -56,8 +59,10 @@ public class WebService extends AsyncTask<String, Long, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         progDailog = new ProgressDialog(actividad);
-        progDailog.setMessage("Cargando Web Service...");
-        progDailog.setIndeterminate(false);
+        progDailog.setIcon(R.drawable.avatar);
+        progDailog.setMessage("Procesando respuesta..");
+        //progDailog.setIndeterminateDrawable();
+        progDailog.setIndeterminate(true);
         progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progDailog.setCancelable(true);
         progDailog.show();
