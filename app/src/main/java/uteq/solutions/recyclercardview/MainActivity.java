@@ -56,7 +56,6 @@ import uteq.solutions.recyclercardview.Models.Mensaje;
 public class MainActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
 
-
     ArrayList<Mensaje> myList = new ArrayList<>();
     MensajesAdaptador adapatorMensajes;
 
@@ -68,25 +67,23 @@ public class MainActivity extends AppCompatActivity {
 
     TextToSpeech textToSpeech;
 
-    LottieAnimationView logo;
-
+    LottieAnimationView avatar, sounds;
 
     private RequestQueue requestQueue;
     private Handler handler = new Handler();
+    private Handler hVerificadorSpeaking = new Handler();
 
     public String ThreadID;
     public String lastMessageID;
-    public String Assistant_ID = "asst_dKqNiDGt1ltpNWq0hzIxuYbd";
-    public String Instrucitons = "Eres un chatbot que responde preguntas sobre la Carrera de Ingeniería de Software y de la Universidad Técnica Estatal de Quevedo (UTEQ)";
     public String run_ID;
 
+    Runnable rVerificadorSpeaking;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestQueue = Volley.newRequestQueue(this);
-        createThread();
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             checkPermission();
@@ -116,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.text);
         micButton = findViewById(R.id.btrecord);
         micButton.setEnabled(false);
-        logo = findViewById(R.id.logoavatar);
+        avatar = findViewById(R.id.logoavatar);
+        sounds = findViewById(R.id.soundvoice);
         txtEstado = findViewById(R.id.txtEstado);
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -185,33 +183,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                if (i != TextToSpeech.ERROR) {
-                    Locale locSpanish = new Locale("spa", "MEX");
-                    textToSpeech.setLanguage(locSpanish);
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                Locale locSpanish = new Locale("spa", "MEX");
+                textToSpeech.setLanguage(locSpanish);
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(this);
+        createThread();
+
+        rVerificadorSpeaking = new Runnable() {
+            public void run() {
+                if (textToSpeech.isSpeaking()) {
+                    if(!sounds.isAnimating()) sounds.playAnimation();
+                    hVerificadorSpeaking.postDelayed(this, 100);
+                }else{
+                    sounds.resumeAnimation();
+                    hVerificadorSpeaking.removeCallbacks(rVerificadorSpeaking);
                 }
             }
-        });
-
-        textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String utteranceId) {
-                logo.playAnimation();
-            }
-
-            @Override
-            public void onDone(String utteranceId) {
-                logo.pauseAnimation();
-            }
-
-            @Override
-            public void onError(String utteranceId) {
-                Log.i("TextToSpeech", "On Error");
-            }
-        });
-
+        };
 
 
     }
@@ -224,6 +216,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         speechRecognizer.destroy();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+
     }
 
     private void checkPermission() {
@@ -253,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                             ThreadID = jsonResp.getString("id").toString();
                             micButton.setEnabled(true);
                             txtEstado.setText("Thread ID: " + ThreadID);
-                            doQuestion("Cuál es el nombre de la coordinadora de la carrera de software");
+                            //doQuestion("Cuál es el nombre de la coordinadora de la carrera de software");
 
                         } catch (JSONException e) {
                             txtEstado.setText("Error creating Thread " + e.toString());
@@ -344,8 +341,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public byte[] getBody() throws AuthFailureError {
-                String requestBody = "{ \"assistant_id\": \"" + Assistant_ID + "\"," +
-                        "      \"instructions\": \"" + Instrucitons + "\"}";
+                String requestBody = "{ \"assistant_id\": \"" + GlobalInfo.Assistant_ID + "\"," +
+                        "      \"instructions\": \"" + GlobalInfo.Instructions + "\"}";
                 return requestBody.getBytes(StandardCharsets.UTF_8);
             }
         };
@@ -395,7 +392,6 @@ public class MainActivity extends AppCompatActivity {
         StringRequest getMessageRequest = new Utf8StringRequest(Request.Method.GET,
                 GlobalInfo.getURLGetMessage(ThreadID, lastMessageID),
                 response -> {
-                    //utf8String = new String(response, "UTF-8");
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
                         JSONArray listaMsg = jsonResponse.getJSONArray("data");
@@ -410,9 +406,10 @@ public class MainActivity extends AppCompatActivity {
                         adapatorMensajes.notifyData(myList);
                         recyclerView.scrollToPosition(myList.size()-1);
 
-                        HashMap<String, String> params = new HashMap<String, String>();
-                        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"3300");
-                        textToSpeech.speak(resp,TextToSpeech.QUEUE_FLUSH, params);
+                        Bundle params = new Bundle();
+                        params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "3300");
+                        textToSpeech.speak(resp, TextToSpeech.QUEUE_FLUSH, params, "3300");
+                        hVerificadorSpeaking.postDelayed(rVerificadorSpeaking, 100);
 
                     } catch (JSONException e) {
                         txtEstado.setText("Error Last Message " + e.toString());
@@ -430,4 +427,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue.add(getMessageRequest);
     }
-}
+
+
+
+   }

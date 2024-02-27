@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalInfo {
-    public static final String Token="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";
+    public static final String Token="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";
     public static final String URL_CreatThread ="https://api.openai.com/v1/threads";
+    public static final String Assistant_ID = "asst_dKqNiDGt1ltpNWq0hzIxuYbd";
+    public static final String Instructions = "Eres un chatbot que responde preguntas sobre la Carrera de Ingeniería de Software y de la Universidad Técnica Estatal de Quevedo (UTEQ)";
 
     public static final String getUrlCreateMessage(String ThreadID){
         return "https://api.openai.com/v1/threads/" + ThreadID + "/messages";
