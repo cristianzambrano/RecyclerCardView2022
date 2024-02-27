@@ -56,6 +56,7 @@ import uteq.solutions.recyclercardview.Models.Mensaje;
 public class MainActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
 
+    String TokenOpenAI;
     ArrayList<Mensaje> myList = new ArrayList<>();
     MensajesAdaptador adapatorMensajes;
 
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        TokenOpenAI = GlobalInfo.getOpenAIApiKey(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             checkPermission();
@@ -266,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return GlobalInfo.getAuthHearders();
+                return GlobalInfo.getAuthHearders(TokenOpenAI);
             }
         };
         requestQueue.add(stringRequest);
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return GlobalInfo.getAuthHearders();
+                return GlobalInfo.getAuthHearders(TokenOpenAI);
             }
 
             @Override
@@ -336,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return GlobalInfo.getAuthHearders();
+                return GlobalInfo.getAuthHearders(TokenOpenAI);
             }
 
             @Override
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             @Override
                             public Map<String, String> getHeaders() throws AuthFailureError {
-                                return GlobalInfo.getAuthHearders();
+                                return GlobalInfo.getAuthHearders(TokenOpenAI);
                             }
                         };
 
@@ -421,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
                 }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return GlobalInfo.getAuthHearders();
+                return GlobalInfo.getAuthHearders(TokenOpenAI);
             }
         };
 
