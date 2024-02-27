@@ -1,4 +1,4 @@
-package Models;
+package uteq.solutions.recyclercardview.Models;
 
 import org.json.JSONArray;
 import org.json.JSONException;

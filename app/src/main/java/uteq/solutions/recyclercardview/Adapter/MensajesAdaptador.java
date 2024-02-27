@@ -1,4 +1,4 @@
-package Adapter;
+package uteq.solutions.recyclercardview.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,12 +9,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import Models.Mensaje;
+import uteq.solutions.recyclercardview.Models.Mensaje;
 import uteq.solutions.recyclercardview.R;
 
 public class MensajesAdaptador extends RecyclerView.Adapter<MensajesAdaptador.MensajeViewHolder> {
