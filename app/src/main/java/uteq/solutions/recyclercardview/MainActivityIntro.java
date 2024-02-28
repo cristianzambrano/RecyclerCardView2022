@@ -16,6 +16,12 @@ public class MainActivityIntro extends AppCompatActivity {
 
     public void onClickEntrar(View v){
         Intent intent = new Intent(MainActivityIntro.this,
+                UIChatbotUTEQ.class);
+        startActivity(intent);
+    }
+
+    public void onClickEntrar2(View v){
+        Intent intent = new Intent(MainActivityIntro.this,
                 MainActivity.class);
         startActivity(intent);
     }

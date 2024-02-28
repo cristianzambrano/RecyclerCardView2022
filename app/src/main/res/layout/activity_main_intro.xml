@@ -52,8 +52,19 @@
         android:onClick="onClickEntrar"
         android:text="Entrar"
         app:layout_constraintBottom_toTopOf="@+id/logoopenia"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btEntrar2"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btEntrar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:onClick="onClickEntrar2"
+        android:text="Psicólogo"
+        app:layout_constraintBottom_toTopOf="@+id/logoopenia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btEntrar" />
 
     <TextView
         android:id="@+id/textView"
@@ -71,8 +82,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/logouteq"
         app:layout_constraintTop_toTopOf="parent" />
-        "
-        tools:layout_editor_absoluteY="10dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
