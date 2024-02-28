@@ -62,13 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static final Integer RecordAudioRequestCode = 1;
     private SpeechRecognizer speechRecognizer;
-    private EditText editText;
-    private ImageView micButton;
+   private ImageView micButton;
     private TextView txtEstado;
 
     TextToSpeech textToSpeech;
-
-    LottieAnimationView avatar, sounds;
+    LottieAnimationView avatar, sounds, recording;
 
     private RequestQueue requestQueue;
     private Handler handler = new Handler();
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         adapatorMensajes = new MensajesAdaptador(getApplicationContext(), myList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.setStackFromEnd(true);
+        //layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapatorMensajes);
 
@@ -111,11 +109,12 @@ public class MainActivity extends AppCompatActivity {
             checkPermission();
         }
 
-        editText = findViewById(R.id.text);
+
         micButton = findViewById(R.id.btrecord);
         micButton.setEnabled(false);
         avatar = findViewById(R.id.logoavatar);
         sounds = findViewById(R.id.soundvoice);
+        recording = findViewById(R.id.recording);
         txtEstado = findViewById(R.id.txtEstado);
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -129,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public void onReadyForSpeech(Bundle bundle) {         }
             @Override
             public void onBeginningOfSpeech() {
-                editText.setText("");
-                editText.setHint("Escuchando la pregunta...");
+                recording.playAnimation();
                 micButton.setImageResource(R.drawable.baseline_stop_circle_24);
             }
 
@@ -141,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onEndOfSpeech() {
-                editText.setHint("");
-                editText.setText("");
+                recording.setProgress(0);
+                recording.resumeAnimation();
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
             }
 
@@ -152,10 +150,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResults(Bundle bundle) {
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
+                recording.resumeAnimation();
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 String texto = data.get(0);
-                editText.setHint("");
-                editText.setText("");
                 if (!texto.equals("")) {
                     myList.add(new Mensaje(texto, "U"));
                     adapatorMensajes.notifyData(myList);
@@ -202,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     sounds.resumeAnimation();
                     hVerificadorSpeaking.removeCallbacks(rVerificadorSpeaking);
+                    micButton.setEnabled(true);
                 }
             }
         };
@@ -210,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doQuestion(String Pregunta) {
+        micButton.setEnabled(false);
         createMessage(Pregunta);
     }
 
@@ -250,11 +249,14 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonResp = new JSONObject(response);
                             ThreadID = jsonResp.getString("id").toString();
                             micButton.setEnabled(true);
-                            txtEstado.setText("Thread ID: " + ThreadID);
-                            //doQuestion("Cuál es el nombre de la coordinadora de la carrera de software");
+                            txtEstado.setText("Chat ID: " + ThreadID);
+                            myList.add(new Mensaje("Bienvenido al ChatBot de la UTEQ, " +
+                                    "presiona el micrófono para enviar un mensaje","A"));
+                            adapatorMensajes.notifyData(myList);
+                            recyclerView.scrollToPosition(myList.size()-1);
 
                         } catch (JSONException e) {
-                            txtEstado.setText("Error creating Thread " + e.toString());
+                            txtEstado.setText("Error Creating Thread: " + e.toString());
                         }
 
                     }
@@ -262,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        txtEstado.setText("Error creating Thread " + error.toString());
+                        txtEstado.setText("Error CreatingThread " + error.toString());
                     }
                 }) {
             @Override
@@ -283,17 +285,17 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResp = new JSONObject(response);
                             lastMessageID = jsonResp.getString("id").toString();
-                            txtEstado.setText("Message ID: " + lastMessageID);
+                            txtEstado.setText("Mensaje ID: " + lastMessageID);
                             runMessage();
                         } catch (JSONException e) {
-                            txtEstado.setText("Error Creating Message: " + e.getMessage());
+                            txtEstado.setText("Error CreatingMessage: " + e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                txtEstado.setText("Error Creating Message: " + error.getMessage());
-                // Manejar el error
+                txtEstado.setText("Error CreatingMessage: " + error.getMessage());
+                micButton.setEnabled(true);
             }
         }) {
             @Override
@@ -323,16 +325,17 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResp = new JSONObject(response);
                             run_ID = jsonResp.getString("id").toString();
-                            txtEstado.setText("RUN ID: " + run_ID);
+                            txtEstado.setText("Ejecución ID: " + run_ID);
                             checkRunStatusPeriodically();
                         } catch (JSONException e) {
-                            txtEstado.setText("Error on RUN " + e.toString());
+                            txtEstado.setText("Error onRUN " + e.toString());
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                txtEstado.setText("Error on RUN : " + error.toString());
+                txtEstado.setText("Error onRUN : " + error.toString());
+                micButton.setEnabled(true);
             }
         }) {
             @Override
@@ -362,18 +365,21 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
                                 String status = jsonResponse.getString("status");
-                                txtEstado.setText(status);
                                 if ("completed".equals(status)) {
                                     getFinalMessage();
+                                    txtEstado.setText("Respuesta Lista!");
                                 } else {
+                                    txtEstado.setText("Estado: " + status);
                                     handler.postDelayed(this, 1000);
+
                                 }
                             } catch (Exception e) {
-                                txtEstado.setText("Error getting Status: " + e.toString());
+                                txtEstado.setText("Error GettingStatus: " + e.toString());
                             }
                         },
                         error -> {
-                            txtEstado.setText("Error getting Status: " + error.toString());
+                            txtEstado.setText("Error GettingStatus: " + error.toString());
+                            micButton.setEnabled(true);
                         })
                         {
                             @Override
@@ -402,7 +408,8 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject contentTextMsg = contentMsg.getJSONObject("text");
                         String resp = contentTextMsg.getString("value").toString();
 
-                        txtEstado.setText("Thread ID: " + ThreadID);
+                        resp = resp.replaceAll("\\【.*?\\】", "");
+                        txtEstado.setText("Chat ID: " + ThreadID);
                         myList.add(new Mensaje(resp,"A"));
                         adapatorMensajes.notifyData(myList);
                         recyclerView.scrollToPosition(myList.size()-1);
@@ -413,12 +420,13 @@ public class MainActivity extends AppCompatActivity {
                         hVerificadorSpeaking.postDelayed(rVerificadorSpeaking, 100);
 
                     } catch (JSONException e) {
-                        txtEstado.setText("Error Last Message " + e.toString());
+                        txtEstado.setText("Error LastMessage: " + e.toString());
 
                     }
                 },
                 error -> {
-                    txtEstado.setText("Error Last Message " + error.toString());
+                    txtEstado.setText("Error LastMessage: " + error.toString());
+                    micButton.setEnabled(true);
                 }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

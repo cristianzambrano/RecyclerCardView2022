@@ -20,17 +20,17 @@
 
             <ImageView
                 android:id="@+id/imgAvatar"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/avatar"
-                android:padding="4dp" />
+                 />
 
             <TextView
                 android:id="@+id/txtpregunta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_toRightOf="@id/imgAvatar"
                 android:text="Nombre"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"

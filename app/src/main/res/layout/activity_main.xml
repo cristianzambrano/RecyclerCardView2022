@@ -8,54 +8,41 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/logoavatar"
-        android:layout_width="170dp"
-        android:layout_height="200dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
         android:layout_margin="10dp"
-        android:layout_marginTop="132dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitulo"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/mickey" />
+        app:lottie_rawRes="@raw/robot4" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/soundvoice"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rcLista"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoavatar"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/soundrobot" />
+        app:lottie_rawRes="@raw/soundrobot"
+        tools:layout_editor_absoluteY="228dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcLista"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_marginStart="10dp"
-
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/soundvoice" />
-
-    <EditText
-        android:id="@+id/text"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="Presione ícono para preguntar"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toStartOf="@id/btrecord"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rcLista"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/txtEstado"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/logoavatar"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/btrecord"
@@ -64,8 +51,39 @@
         android:layout_margin="10dp"
         android:backgroundTint="#FF0000"
         android:src="@drawable/ic_mic_black_off"
+        app:layout_constraintTop_toBottomOf="@+id/soundvoice"
         app:layout_constraintBottom_toTopOf="@+id/txtEstado"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/rcLista"
+        app:layout_constraintStart_toEndOf="@+id/recording"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/recording"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/btrecord"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/soundvoice"
+        app:layout_constraintBottom_toTopOf="@+id/txtEstado"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/microanimado"
+         />
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="ChatBot UTEQ"
+        android:textAlignment="center"
+        android:textColor="#378E09"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/rcLista"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtEstado"
@@ -78,8 +96,7 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
