@@ -15,6 +15,7 @@ import java.util.List;
 import uteq.solutions.recyclercardview.Models.Mensaje;
 import uteq.solutions.recyclercardview.R;
 
+
 public class MensajesAdaptador extends RecyclerView.Adapter<MensajesAdaptador.MensajeViewHolder> {
 
     int mLastPosition = 0;

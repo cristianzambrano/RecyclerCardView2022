@@ -10,10 +10,11 @@ import java.util.Properties;
 
 public class GlobalInfo {
     public static final String URL_CreatThread ="https://api.openai.com/v1/threads";
-    public static final String Assistant_ID = "asst_5eX3GTLBTe489iRvQH3nRvLX";
+    public static final String Assistant_ID = "asst_ZZkbxO7wYjTsGdrBdGamgvHa";
 
     //public static final String Instructions = "Eres un chatbot que responde preguntas sobre la Carrera de Ingeniería de Software y de la Universidad Técnica Estatal de Quevedo (UTEQ)";
-    public static final String Instructions = "Eres un Psicólogo Infantil que está teniendo una entrevista con un niño";
+    //public static final String Instructions = "Eres un Psicólogo Infantil que está teniendo una entrevista con un niño";
+    public static final String Instructions = "Eres un chatbot que responde preguntas sobre los alumnos matriculados en el sexto semestre de la Carrera de Ingeniería de Software de la Universidad Técnica Estatal de Quevedo (UTEQ)";
 
     public static final String getUrlCreateMessage(String ThreadID){
         return "https://api.openai.com/v1/threads/" + ThreadID + "/messages";

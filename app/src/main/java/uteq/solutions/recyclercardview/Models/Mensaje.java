@@ -1,10 +1,5 @@
 package uteq.solutions.recyclercardview.Models;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
 public class Mensaje {
     private String mensaje;
     private String avatar;

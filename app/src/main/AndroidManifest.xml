@@ -17,13 +17,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".UIChatBasic"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".UIChatbotUTEQ"
-            android:exported="false"
-           />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MainActivityIntro"
             android:exported="true">
