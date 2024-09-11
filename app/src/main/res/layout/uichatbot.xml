@@ -83,7 +83,7 @@
         app:layout_constraintBottom_toTopOf="@+id/txtEstado"
         app:layout_constraintEnd_toStartOf="@+id/btsend"
         app:layout_constraintStart_toStartOf="parent"
-        app:startIconDrawable="@drawable/icuser"
+        app:startIconDrawable="@drawable/ic_user"
         app:startIconTint="#03853D">
 
         <com.google.android.material.textfield.TextInputEditText

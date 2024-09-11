@@ -46,7 +46,7 @@ public class MensajesAdaptador extends RecyclerView.Adapter<MensajesAdaptador.Me
     public void onBindViewHolder(MensajeViewHolder holder, int position) {
         Mensaje mensaje = lstMensajes.get(position);
         holder.textViewMensaje.setText(mensaje.getMensaje());
-        holder.imageView.setImageResource(mensaje.getAvatar()=="U"?R.drawable.icuser:R.drawable.avatar);
+        holder.imageView.setImageResource(mensaje.getAvatar()=="U"?R.drawable.img:R.drawable.avatar);
         mLastPosition =position;
     }
 

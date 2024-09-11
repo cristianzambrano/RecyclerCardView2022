@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class GlobalInfo {
     public static final String URL_CreatThread ="https://api.openai.com/v1/threads";
-    public static final String Assistant_ID = "asst_ZZkbxO7wYjTsGdrBdGamgvHa";
+    public static final String Assistant_ID = "asst_dKqNiDGt1ltpNWq0hzIxuYbd";
 
     //public static final String Instructions = "Eres un chatbot que responde preguntas sobre la Carrera de Ingeniería de Software y de la Universidad Técnica Estatal de Quevedo (UTEQ)";
     //public static final String Instructions = "Eres un Psicólogo Infantil que está teniendo una entrevista con un niño";
@@ -36,7 +36,7 @@ public class GlobalInfo {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("Authorization", "Bearer " + Token);
-        headers.put("OpenAI-Beta", "assistants=v1");
+        headers.put("OpenAI-Beta", "assistants=v2");
         return headers;
     }
     public static String getOpenAIApiKey(Context context) {
